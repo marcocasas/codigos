@@ -15,20 +15,24 @@ uint8_t bits[5];  // buffer to receive data
 
 #define TIMEOUT 10000
 
+//Varibales globales para NodeHandle, mensajes utilizados y publicador.
 ros::NodeHandle nh;
-
 geometry_msgs::Twist vel;
+ros::Publisher chatter("Sensores", &vel);
 
- void motorServoVel( const geometry_msgs::Twist& vel) {
-  ServoAngulo(vel.angular.x);
+//Declaracion de la funcion callback.
+ void motorServoVel(const geometry_msgs::Twist& vel) {
+  ServoAngulo();
+  //ServoAngulo(vel.angular.x);
  }
 
-ros::Publisher chatter("Sensores", &vel);
-ros::Subscriber <geometry_msgs::Twist> sub("motorCPU", &motorServoVel );
-//char hello[13] = "hello world!";
+//Declaracion del suscriptor.
+ros::Subscriber <geometry_msgs::Twist> sub("motorCPU", &motorServoVel);
 
 void setup()
 {
+  Serial.begin(9600);
+  //Necesario iniciar nodo y publicador aquí, así como suscribirse.
   nh.initNode();
   nh.advertise(chatter);
   nh.subscribe(sub);
@@ -40,7 +44,7 @@ void loop()
   Temperatura();
   vel.linear.x= bits[0]; //temperatura
   vel.linear.y= bits[2];
-  vel.linear.z= luz;
+  vel.linear.z= bits[5];
 
   chatter.publish( &vel );
   nh.spinOnce(); //garantiza que se ejecute el suscriber
@@ -97,8 +101,8 @@ void Temperatura(){
   }
 }
 
-void turnServo() {
-
+void ServoAngulo() {
+  Serial.print("hola");
 }
 
 //vel  x,y,z
