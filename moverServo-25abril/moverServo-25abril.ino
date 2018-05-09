@@ -1,7 +1,7 @@
 void setup() {
     pinMode(LED_BUILTIN, OUTPUT);
  
-    noInterrupts();          // deshabilitamos interrupciones globalss
+    noInterrupts();          // deshabilitamos interrupciones globales
     TCCR3A = 0;     //Se asigna 0 a TCCR1A
     TCCR3B = 0;     //Lo mismo para TCCR1B
     TCNT3 = 0;

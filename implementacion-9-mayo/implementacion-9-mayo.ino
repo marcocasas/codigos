@@ -1,13 +1,22 @@
 int a, b, c;
 //a izq
 //b der
+int enable = 8;
+int adelante = 9;
+int atras = 10;
 
 void setup() {
   //Asignamos pines donde están conectados sensores infrarrojos.
   pinMode(2,INPUT);
   pinMode(3,INPUT);
-  pinMode(A0,INPUT);
+  pinMode(5,INPUT);
+  pinMode(adelante,OUTPUT);
+  pinMode(atras,OUTPUT);
+  pinMode(enable,OUTPUT);
+  
   pinMode(LED_BUILTIN, OUTPUT);
+
+  delay(350);
 
   /**
    * Bloque para seteo de Timer1 y contar 1's y 0's con el fin de
@@ -37,11 +46,11 @@ void setup() {
 void loop() {
   a = digitalRead(2);
   b = digitalRead(3);
-  c = analogRead(A0);
-  //Serial.print(a);
-  //Serial.println(b);
+  c = digitalRead(5);
+  Serial.print(a);
+  Serial.println(b);
   Serial.println(c);
-  delay(200);
+  delay(10);
 
 //  //1 = veo la cinta (blanca)
 //  
@@ -58,7 +67,25 @@ void loop() {
 //      giraIzquierda();
 //    }
 //  }
-//  
+
+    /*
+   * Código del motor DC.
+   */
+  digitalWrite(enable,HIGH);
+  delay(100);
+  analogWrite(adelante,150);
+  delay(1000);
+//  Serial.println(analogRead(9));
+//  analogWrite(atras,0);
+//  delay(10);
+//  Serial.println(analogRead(10));
+//  digitalWrite(enable,LOW);
+//  delay(2000);
+//  Serial.println(digitalRead(8));
+//  analogWrite(atras,250);
+//  analogWrite(adelante,0);
+//  delay(2000);
+//  Serial.println(analogRead(9));
 }
 
 /**
