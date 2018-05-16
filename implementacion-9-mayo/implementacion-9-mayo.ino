@@ -1,9 +1,14 @@
+#include <Servo.h>
+Servo myservo;
+
 int a, b, c;
-//a izq
+//a izq (provisional: derecho)
 //b der
 int enable = 8;
 int adelante = 9;
 int atras = 10;
+int servoPin = 52;
+int estado = 10;
 
 void setup() {
   //Asignamos pines donde están conectados sensores infrarrojos.
@@ -39,6 +44,11 @@ void setup() {
   TIMSK1 |= (1 << OCIE1A);
   //Permitir interrupciones globales:
   interrupts();
+
+  /*
+  * Bloque para asignacion del servo motor. 
+  */
+  myservo.attach(servoPin);
   
   Serial.begin(9600);
 }
@@ -46,6 +56,30 @@ void setup() {
 void loop() {
   a = digitalRead(2);
   b = digitalRead(3);
+
+  if(a == 1) {
+    if (b == 1) {
+      if(estado != 45) {
+        myservo.write(45);
+        estado = 45; 
+      }
+    } else {
+      if (estado != 10) {
+        myservo.write(10);
+        estado = 10;
+      }
+    }
+  } else {
+    if (b == 1) {
+      if(estado != 85) {
+        myservo.write(85);
+        estado = 85;
+      }
+    } else {
+      myservo.write(85);
+    }
+  }
+  
   c = digitalRead(5);
   Serial.print(a);
   Serial.println(b);

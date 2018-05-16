@@ -1,6 +1,10 @@
 int a, b, c;
-//a izq
-//b der
+//a DER
+//b IZQ
+
+/*
+ * IMPORTANTE: NEGRO ES CERO PARA NOSOTROS EN LA LECTURA. BLANCO ES UNO PARA NOSOTROS.
+ */
 
 void setup() {
   //Asignamos pines donde están conectados sensores infrarrojos.
@@ -37,10 +41,10 @@ void setup() {
 void loop() {
   a = digitalRead(2);
   b = digitalRead(3);
-  c = analogRead(A0);
-  //Serial.print(a);
-  //Serial.println(b);
-  Serial.println(c);
+  //c = analogRead(A0);
+  Serial.print(a);
+  Serial.println(b);
+  //Serial.println(c);
   delay(200);
 
 //  //1 = veo la cinta (blanca)
