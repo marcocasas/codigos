@@ -25,7 +25,8 @@ void loop() {
   digitalWrite(enable,HIGH);
   delay(100);
   Serial.println(digitalRead(8));
-  analogWrite(adelante,250);
+  analogWrite(adelante,255); //150 comienza a moverse
+  digitalWrite(atras,LOW);
   delay(1000);
 //  Serial.println(analogRead(9));
 //  analogWrite(atras,0);

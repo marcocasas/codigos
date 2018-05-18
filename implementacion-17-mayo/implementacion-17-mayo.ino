@@ -117,7 +117,7 @@ void loop() {
 void adelante()
 {
   digitalWrite(ATRAS, LOW);
-  analogWrite(ADELANTE,200 );
+  digitalWrite(ADELANTE,HIGH);
 }
 
 void atras()
