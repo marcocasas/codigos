@@ -1,3 +1,5 @@
+#include <SD.h>
+
 #include <Servo.h>
 Servo myservo;
 

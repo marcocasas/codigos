@@ -1,9 +1,9 @@
 #include <Servo.h>
-
 //Gracias, Alexander!
 
 #include <avr/io.h>
-
+#include <ros.h>
+#include <std_msgs/Float64.h>
 ////////
 Servo myservo;
 
@@ -21,8 +21,17 @@ const int ENABLE = 8;
 int vueltas = 0;
 unsigned long tiempo1;
 unsigned long tiempo2;
-const int velDeseada = 4; //por el momento fue una supocición
+double vel = 0;
+const int velDeseada = 1.1; 
 
+
+/*
+ * Xbee & ROS
+ */
+ros::NodeHandle  nh;
+std_msgs::Float64 str_msg;
+ros::Publisher chatter("chatter", &str_msg);
+ 
 void setup() {
   cli();
   TCCR5B = B00001111;
@@ -33,7 +42,7 @@ void setup() {
   //pinMode(18, INPUT); //previamente era 8.
   Serial.begin(9600);
   sei();
-  pinMode(ADELANTE, OUTPUT);
+  pinMode(ADELANTE, OUTPUT); //ESTE SERA EL PIN PWM PARA INYECTAR VOLTAJE VARIABLE
   pinMode(ATRAS, OUTPUT);
   pinMode(ENABLE, OUTPUT);
   delay(2000);
@@ -53,12 +62,12 @@ void setup() {
   pinMode(2,INPUT);
   pinMode(3,INPUT);
   ////////////////////
-}
 
-ISR(TIMER5_COMPA_vect){  
-   vueltas++;
-   //Serial.println(TCNT5);
-   TCNT5 = 240;
+  /*
+   * ROS NODE HANDLER SETUP
+   */
+  nh.initNode();
+  nh.advertise(chatter);
 }
 
 void loop() {
@@ -68,7 +77,7 @@ void loop() {
   tiempo2 = millis();
   if(tiempo2-tiempo1>= 1000)
   {
-      double vel = vueltas + (TCNT5-240.0)/16.0;
+      vel = vueltas + (TCNT5-240.0)/16.0;
       Serial.print("La velocidad es de: ");
       Serial.print(vel);
       Serial.println(" rev/s");
@@ -76,13 +85,13 @@ void loop() {
       tiempo1 = tiempo2;
       TCNT5 = 240;
 
-     /* //VelDeseada es el max de velocidad que nosotros queremos que tenga
+      //VelDeseada es el max de velocidad que nosotros queremos que tenga
       error = velDeseada - vel;
       sumaErrores += error;
       velocidadTotal = kp*eror + ki*sumaErrores;
       Serial.print("error: ")
       Serial.print();
-      ////*/
+      ////
   }
   
   //////////////////
@@ -95,7 +104,14 @@ void loop() {
   delay(200);
   LogicaServo(a,b);
   ///////////////////
-  
+
+
+  /*
+   * PUBLISH ROS TOPIC
+   */
+  str_msg.data = vel;
+  chatter.publish( &str_msg );
+  nh.spinOnce();
 }
 
 void adelante()
@@ -140,4 +156,10 @@ void LogicaServo(int a,int b){
     }
   }
   
+}
+
+ISR(TIMER5_COMPA_vect){  
+   vueltas++;
+   //Serial.println(TCNT5);
+   TCNT5 = 240;
 }
