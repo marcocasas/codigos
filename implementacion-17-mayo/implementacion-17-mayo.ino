@@ -85,12 +85,12 @@ void loop() {
       tiempo1 = tiempo2;
       TCNT5 = 240;
 
-      //VelDeseada es el max de velocidad que nosotros queremos que tenga
-      error = velDeseada - vel;
-      sumaErrores += error;
-      velocidadTotal = kp*eror + ki*sumaErrores;
-      Serial.print("error: ")
-      Serial.print();
+//      //VelDeseada es el max de velocidad que nosotros queremos que tenga
+//      error = velDeseada - vel;
+//      sumaErrores += error;
+//      velocidadTotal = kp*eror + ki*sumaErrores;
+//      Serial.print("error: ")
+//      Serial.print();
       ////
   }
   
@@ -117,7 +117,7 @@ void loop() {
 void adelante()
 {
   digitalWrite(ATRAS, LOW);
-  digitalWrite(ADELANTE, HIGH);
+  analogWrite(ADELANTE,200 );
 }
 
 void atras()
