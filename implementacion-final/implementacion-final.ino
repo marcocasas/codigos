@@ -35,6 +35,10 @@ double sumaErrores = 0;
 ros::NodeHandle  nh;
 std_msgs::Float64 str_msg;
 ros::Publisher chatter("chatter", &str_msg);
+
+//Para ver a qué dirección se dirige.
+std_msgs::Float64 dir;
+ros::Publisher direccion("direccion", &dir);
  
 void setup() {
   cli();
@@ -72,6 +76,7 @@ void setup() {
    */
   nh.initNode();
   nh.advertise(chatter);
+  nh.advertise(direccion);
 }
 
 void loop() {
@@ -148,6 +153,10 @@ void LogicaServo(int a,int b){
         //delay(100);
         estado = 45;
         velDeseada = 2.8;
+
+        dir.data = 0;
+        direccion.publish( &dir );
+        nh.spinOnce();
       }
     } else {
       if (estado != 10) {
@@ -155,6 +164,10 @@ void LogicaServo(int a,int b){
         //delay(100);
         estado = 10;
         velDeseada = 1.0;
+
+        dir.data = -1.0;
+        direccion.publish( &dir );
+        nh.spinOnce();
       }
     }
   } else {
@@ -164,13 +177,22 @@ void LogicaServo(int a,int b){
         //delay(100);
         estado = 85;
         velDeseada = 1.0;
+
         
+        dir.data = 1.0;
+        direccion.publish( &dir );
+        nh.spinOnce();
       }
     } else {
       myservo.write(75);
       //delay(100);
       estado = 85;
       velDeseada = 1.0;
+      
+      
+      dir.data = 1.0;
+      direccion.publish( &dir );
+      nh.spinOnce();
     }
   }
   
